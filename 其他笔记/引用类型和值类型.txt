@@ -1,0 +1,35 @@
+引用类型：
+var o = new Obj  ecy();
+首先开辟一块内存空间：在栈中存放的是对象引用的地址（js中地址是用16进制表示），而堆中存放的是对象。将来我们根据变量o找到对象的引用地址，通过地址来找到对象。两次寻址找到对象，而值类型是寻址 一次，对象的属性和方法也是存储在堆内存中，
+
+
+
+
+
+基本数据类型（值类型）：
+  当值类型作为参数传递的时候，函数内部的修改是不会改变外部变量的值。
+
+复杂数据类型（引用数据类型）
+ 当引用类型作为参数传递的时候，函数内部修改是会改变外部变量的值。全局作用域的变量和局部作用域的变量是不一样的，所以说，就算变量同名，应该也是不一样的变量，如果变量不一样的话，那么就得在栈中复制一份对象的引用，但是复制的引用还是指向对象。
+	<script>
+			function Student(name,age,sex){
+				this.name=name;
+				this.age=age;
+				this.sex=sex;
+				this.sayhi=function(){
+					console.log("hello world");
+				}
+				
+			}
+			function f1(stu){
+				stu = new Student();//创建另一个对象，重新开辟一块堆内存空间，但是并不会将其他地方变量引用的对象属性和方法复制给新创建的。
+				stu.name = "xxx";//给新对象添加属性并赋值，
+				console.log(stu.age);
+			}
+			var s1 = new Student("张三",12,"男");
+//			for( var i in s1){
+//				console.log(i+"-----"+s1[i]);
+//			}
+			f1(s1);
+			console.log(s1.name);
+		</script>

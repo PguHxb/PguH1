@@ -1,0 +1,12 @@
+background：attachment；属性是设置背景图像是否固定或者随着页面的其余部分来滚动的。
+版本为css1
+如何设置呢，例如：
+body{
+	background-image:url("img/***.jpg");
+	background-attachment:fixd;
+
+}
+有三个属性值，
+scroll：默认值，背景图是会随着页面的其余部分滚动而滚动。
+fixed：当页面的其余部分滚动时，背景图像是不会移动的。
+inherit：规定应该从父元素继承background-attachment属性。

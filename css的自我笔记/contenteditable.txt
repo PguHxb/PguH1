@@ -1,0 +1,5 @@
+contenteditable是html中的一个属性，当设置htmlcontenteditable="true"时，即可开启此元素的编辑模式
+html中的contenteditable可以打开某些元素的可编辑状态，即可以让div或者整个网页以及span等等元素都可以设置为可写，js 中为document.all("txt").contentEditable=true
+兼容：在IE8设置表格可写不支持，其他元素没有问题，其他浏览器正常
+
+作用：前端UI的美化，表单元素的css样式不一定能达到设计师的要求，通过开启div，span，p 元素的contenteditable来实现表单元素的功能，（但是需要来自js的支持）

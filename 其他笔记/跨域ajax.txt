@@ -1,0 +1,32 @@
+浏览器是有安全限制的，不允许跨域的ajax调用。
+跨域就是页面地址的域名和端口号不同就算的跨域，如
+127.0.0.1:7070  与  127.0.0.1:7071     端口号不相同，算是跨域
+127.0.0.1:7070   与   127.0.0.2:7070   域名不同，是为跨域
+
+
+那么，跨域的ajax是利用动态的加载脚本的方式来与跨域的服务器交互数据
+跨域服务器的交互在jquery中的实现：
+<script>
+	$.ajax({
+		url:"请求的地址",
+		jsonp:"jsoncallback",
+		datatype:"jsonp",
+		success:function(data){
+			console.log(data);
+		}
+	})
+</script>
+这就是跨域请求，其中跨域请求type只有get的请求方式，所以也是不需要设置的，其中的datatype是需设置成"jsonp"的，
+其中的jsonp的参数的jsoncallback
+
+那么模拟js实现跨域跨域请求：
+<script>
+	function showname(data){
+		console.log(data);
+	}
+	var sc = document.createElement("script");
+	sc.src="请求的地址?jsonpcallback=showname";//其中这里设回调的函数
+	document.head.appendchild("sc");
+</script>
+那么，上述就是js实现跨域调用的过程。
+那么，js与jquery的区别在于，就是jquery在调用完成之后是会动态删除创建的函数，因为开始的时候函数本身也是自动创建的。
