@@ -1,0 +1,288 @@
+ECMAScript中把对象定义为：无序属性的集合，其属性可以包含基本值，对象，或者函数，严格意义上来说，这就相当于说对象是一组没有特定顺序的值，对象的每一个属性和方法都有一个名字，而每个名字都映射到一个值。
+
+构造函数模式：
+	是为了使用构造函数来创建特定类型的对象，从而自定义对象的属性和方法。
+	function Person(name,age,job){
+		this.name=name;
+		this.age=age;
+		this.job=job;
+		this.sayname=function(){
+			alert(this.name);
+		}
+	}
+	var person1 = new person("hello",12,"software");
+	var person2 = new person("world",13,"hello");
+
+	以上，按照惯例，构造函数始终都应该以一个大写字母开头，主要是为了区别于其他函数，因为构造函数也只是函数，只不过是用来创建对象而已。
+	要创建person的新的实例：有一下几个步骤：
+		1.创建一个新的对象
+		2.将构造函数的作用域赋给对象(this是指向新的对象)；
+		3.执行构造函数的代码(为新的对象添加属性)
+		4.返回新的对象
+
+	构造函数当做函数使用：
+		//当构造函数使用
+		var person = new person("hello",12,"world");
+		person.sayname();//hello
+		//当普通函数调用
+		person("hello",12,"world");
+		window.sayname();//hello
+		//在另一个对象的作用域中调用
+		var o = new object();
+		person.call(o,"hello",12,"world");
+		o.sayname();//hello
+
+		以上是那种都是对前面定义的构造函数person的使用，
+
+		构造函数的问题就是每个方法都要在每个实例上重新创建一遍
+
+		function Person(name,age,job){
+		this.name=name;
+		this.age=age;
+		this.job=job;
+		this.sayname= sayname;
+		}
+
+		this.sayname=function(){
+			alert(this.name);
+		}
+	
+		var person1 = new person("hello",12,"software");
+		var person2 = new person("world",13,"hello");
+
+		以上，如果将函数sayname()移动到构造函数外部，我们将sayname()函数定义为全局函数，然后再将sayname属性设置成等于全局的sayname函数，那么，sayname包含的就是一个指针指向函数的指针，所以person1 和person2就共用了去哪聚作用域中定义的同一个sayname函数。但是，问题来了，如果对象定义了很多方法，那就要定义多个全局函数，于是我们这个自定义的引用类型就没有封装性可言了，那么，下面就是使用原型模式来解决问题。
+
+	原型模式：
+		前面我们说到，创建的每个函数都是有两个属性：length和prototype(原型)，那么prototype属性是一个指针，指向的是一个对象，而这个对象的用途是包含可以有特定类型的所有实例共享的属性和方法。
+		那么，字面量的意思上来说，就是prototype就是通过调用构造函数而创建的那个对象实例的原型对象，好处就是可以让所有的对象实例共享他所包含的属性和方法，也就是说，不必再构造函数中定义对象实例的信息，而是可以将这些信息直接添加到原型对象中，
+
+		如列子：
+
+		function Person(){
+
+		}
+		person.prototype.name="hello";
+		person.prototype.age=12;
+		person.prototype.job="world";
+		person.prototype.sayname = function(){
+			alert(this.name);
+		};
+		var person1 = new person();
+		person1.sayname();//hello
+		var person2 = new person2();
+		perosn.sayname();//hello
+
+		console.log(person1.sayname == person2.sayname)//true
+
+		我们将sayname()方法和属性直接添加到person的prototype属性中，构造函数变成了空的函数，但是也可以完全可以通过调用构造函数来创建新的对象，而新的对象还会具有相同的属性和方法。
+
+
+		理解原型对象：
+			无论是什么时候，只要创建了一个新的函数，那么根据特定的规则就会创建一prototype属性，这个属性指向的是函数的原型对象，默认的情况下，原型对象都会自动获得constructor(构造函数)属性，这个属性是指向prototype属性所在函数的指针，
+			如上例，Person.prototype.constructor指向person，而通过这个构造函数，我们还可继续为原型对象添加其他属性和方法
+
+			创建自定义的构造函数后，其原型对象默认只会取得constructor属性，而至于其他的方法，则都是从Object继承而来。
+			当调用构造函数创建一个实例后，该实例的内部将包含一个指针(内部属性)，指向的是构造函数的原型对象。
+			虽说，脚本是没有标准的方式访问[[prototype]],但是浏览器在每个对象都支持一个属性_proto_，而在其他实现中，这个属性对脚本则是完全不可见得。
+			不过，这个连接存在于实例与构造函数的原型对象中，而不是存在于实例与构造函数中
+
+
+			function Person(){
+
+			}
+			person.prototype.name="hello";
+			person.prototype.age=12;
+			person.prototype.job="world";
+			person.prototype.sayname = function(){
+				alert(this.name);
+			};
+			var person1 = new person();
+			person1.sayname();//hello
+			var person2 = new person2();
+			perosn.sayname();//hello
+
+			以上代码中的运行方式：
+				每当代码读取某个对象的某个属性时，都会执行一次搜索，目标是给定名字的属性。
+				搜索首先是从对象的实例本身开始的，如果在实例中找到具有给定名字的属性，则返回该属性的值；如果没有找到，则继续搜索指针指向的原型对象，在原型对象中查找具有给定名字的属性。如果在原型对象中找到了这个属性，那么则返回该属性的值。
+				也就是说，当我们执行person1.sayname()的时候，会先后执行两次搜素
+				第一会向实例person1搜索给定名字的属性，如果没有，则向person1的原型查找，如果有，则返回
+
+
+
+			function Person(){
+
+			}
+			person.prototype.name="hello";
+			person.prototype.age=12;
+			person.prototype.job="world";
+			person.prototype.sayname = function(){
+				alert(this.name);
+			};
+			var person1 = new person();
+			var person2 = new person();
+
+				//如果在对象实例中添加一个与原型一样的属性时，那么读取值的时候，返回的是实例的属性值，从而不必去搜索原型的值
+			person1.name="hi";
+			alert(person1.name);//hi
+				//person2实例是没有添加新的属性值，所以他还是访问原型的值
+			alert(persopn2.name)//hello
+
+				//这里，我们将person1实例的属性值使用delete操作符删除后，就恢复了对原型name属性的链接，所以他还是可以访问的到原型的name属性
+			delete person1.name;
+			alert(person1.name);//hello
+
+
+
+		原型与in操作符
+			有两种方式使用in操作符：单独使用和在for-in循环使用，在单独使用时，in操作符会在通过对象访问给定属性是返回true，无论属性是存在于实例中，还是原型链中，
+
+					function Person(){
+
+			}
+			person.prototype.name="hello";
+			person.prototype.age=12;
+			person.prototype.job="world";
+			person.prototype.sayname = function(){
+				alert(this.name);
+			};
+			var person1 = new person();
+			var person2 = new person();
+			alert("name" in person1);//true
+				
+			person1.name="hi";
+			alert(person1.name);//hi
+			alert("name" in person1);//true
+				
+			alert(persopn2.name)//hello
+			alert("name" in person2);//true
+
+				
+			delete person1.name;
+			alert(person1.name);//hello
+
+
+			in操作符只要通过对象能够访问的到属性就返回true
+
+
+			当然，我们还是可以使用更简单的原型语法，使用一个包含所有属性和方法的对象字面量来重写这个页面：
+
+				function Person(){
+
+				}
+				Person.prototype={
+					name:"hello",
+					age:12,
+					job:"world",
+					sayname:function(){
+						alert(this.name)
+					}
+				}
+
+				上述的代码中，我们将person.prototype设置成等于一个对象字面量形式创建的新对象。
+				虽说最终的结果是相同的，但是还是有一个列外的就是constructor属性不在指向person了，因为每创建一个函数，就会同时创建一个prototype对象，这个属性会自动获得constructor属性。而我们在这里完全重写了默认的prototype对象，因此，constructor属性也就变成新的constructor属性(Object构造函数)，就不在指向person函数了，
+
+
+
+			原型的动态性：
+				由于在原型中查找值的过程是一次搜素，因此我们对原型对象所做的任何修改都是可以从实例上反映出来的，即使是先创建实例后修改原型也是如此：
+					var friend = new Person();
+
+					Person.prototype.sayhi = functiong(){
+						alert("hi");
+					}
+
+					friend.sayhi();//hi
+
+					即使实例friend是在添加新的方法之前创建的，但是，他仍可以访问的到，因为实例与原型之间是一个松散的连接关系，因为在实例中没有找到的方法，会去原型之中寻找方法
+
+					但是，重写了原型对象是不可以的，我们知道，调用构造函数是会为实例添加一个指向最初原型的[[prototype]]指针，而如果把原型修改为另一个对象，就等于切断了构造函数与最初原型之间的联系。
+					只要记住，实例中的的指针仅指向原型，而不指向构造函数。
+						function Person(){
+
+						}
+						var friend = new Person();
+
+						Person.prototype = {
+							name:"hello",
+							age:12,
+							job:"world",
+							sayname:function(){
+								alert(this.name);
+							}
+						};
+
+						friend.sayname();
+
+						重写的原型对象切断了现有原型与之前已经存在的对象实例之间的关系，他们引用的仍是最初的原型。
+
+
+
+				原生对象的原型：
+
+				我们是可以在原生的引用类型添加新的方法：
+					String.prototype.stratWith = function(text){
+						return this.indexof(text) == 0;//indexof方法是返回某个指定的字符串值在字符串中首次出现的位置
+					}
+					var message = "hello world";
+					alert(mesage.stratWith("hello"))//true
+
+
+
+			原型对象的问题：
+				function Person(){
+
+				}
+				person.prototype.name="hello";
+				person.prototype.age=12;
+				person.prototype.job="world";
+				friends:["hhhh","xxxxx"];
+				person.prototype.sayname = function(){
+					alert(this.name);
+				};
+				var person1 = new person();
+				var person2 = new person();
+
+				person1.friends.push("bbbb");
+
+				alert(person1.friends);//hhhh,xxxxx,bbbb
+				alert(person2.friends);;//hhhh,xxxxx,bbbb
+				alert(person1.friends == person2.friends);//true
+
+				从上述代码我们可以看到，我们首先修改了person1实例引用的数组，添加了一个字符串进去，所以他的结果就是hhhh,xxxxx,bbbb   ，但是实例person2的引用的数组也是这样的结果。
+				出现这种结果，主要是以为person1 引用的数组是从原型之中获得的，所以就导致person2和person1引用的是同一个数组，修改其中的会进行另外一个。
+				那么，实例要有自己的属性怎么办呢
+
+
+		组合使用构造函数模式和原型模式
+
+			创建自定义类型的最常见的方式就是使用组合使用构造函数模式和原型模式。构造函数模式用于定义实例属性，而原型模式用于定义方法和共享的属性。结果，每个实例都会有自己的一份实例属性的副本，但同时又共享着对方法的引用，最大限度的节省内存，还可以支持向构造函数传递参数。
+				下面的代码重写前面的例子：
+
+					function Person (name,age,job){
+						this.name = name;
+						this.age = age;
+						this.job= job;
+						this.friends = ["hhh","xxx"];
+
+					}
+
+					Person.prototypr = {
+						constroctor : Person,//这是重写对象之后使用对象字面量的写法，因为会改变其原型的引用，所以要手动将引用指向定义的构造函数
+						sayname:fucntion(){
+							alert(this.name);
+						}
+					}
+
+					var person1 = new Person("hello","12","world");
+					var person2 = new Person("hello","12","world");
+
+					person1.friends.push("bbb");
+
+					alert(person1.friends);//"hello","12","world","bbb"
+					alert(person2.friends);//"hello","12","world"
+
+					上述的代码中，实例属性在构造函数中定义的，而由所有实例共享的属性constructor和方法sayname()则在原型定义，所以，更改了person1的数组并不会影响到person2的数组
+
+
+
+

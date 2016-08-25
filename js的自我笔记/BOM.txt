@@ -1,0 +1,52 @@
+BOM(浏览器对象模型)BOM提供很多对象，用于访问浏览器的功能，但这些功能是与网页无关的。
+
+window对象
+	BOM的核心为window,他表示的是浏=浏览器的一个实例。在浏览器中window对象有双重角色，它既是通过JavaScript访问浏览器窗口的一个接口，也是ECMAscript中的global对象。这意味着的是，在网页中定义的任何一个对象，变量，函数，都是以window作为其global对象的，因此是有权访问parseInt()等方法。
+
+	全局作用域：
+		由于window对象同时扮演的是ECMAscript中的global对象的角色，因此在全局作用域中声明的变量，函数都会成为window对象的属性和方法。
+		 var age = 29;
+		 function sayAge(){
+		 	alert(this.age);
+		 }
+		 alert(window.age)//29
+		 sayAge();//29
+		 window.sayAge()//29
+
+		 以上的代码中，我们是在全局作用域中定义了一个变量和函数，他们是自动归于全局作用域中的，是可以通过window.age来访问age，也是可以通过window.sayAge()访问函数ssayAge(),由于sayAge（）存在于全局作用域中，因此this.age被映射到window,age，最终显示的是结果仍为正确的。
+
+		 全局变量会自动成为window对象的属性。但是与在window对象上直接定义属性还是有区别的，那就是全局变量符是不能通过delete操作符来直接删除，而直接定义在window对象上的属性是可以直接使用delete来删除属性的。如下例：
+
+		 var age =29;//使用var语句添加的window属性是有一个名为(configurable)的特性，而这个特性的值是被中设置为false的，因此定义这样属性是不可以通过delete从操作符来删除
+		 window.color="red";
+
+		 //在IE<9时是抛出错误的，在其他的浏览器中返回的都为false
+		 delete window.age;
+
+		 //在IE<9时是抛出错误，而在其他浏览器返回的是true
+		 delete window.color
+
+		 alert(window.age);//29
+		 alert(window.color)//undefined
+
+
+
+	窗口关系及框架：
+		如果页面中包含框架，那么每个框架都是有自己的window对象，并且保存在frames集合中，在frames集合中，可以通过数值索引(从0开始，从左值右，从上到下)或者是框架名称来访问相应的window对象，每个window对象都有一个name属性，其中包含的就是框架的名称。
+
+		<html>
+			<head>
+
+			</head>
+			<frameset rows="160,*">
+				<frame src="frame.html" name="tofarame"></frame>
+				<frameset cols="50%,50%">
+					<farme src="#" name="leftframe"></frame>
+					<frame scr="#" name ="righeframe"></frame>
+				</frameset>
+			</framest>
+		</html>
+
+		以上的代码时创建了一个框架集，其中的一个框架是居上的，两个框架居下，对这个例子而言，可以通过window.frames[0]或者是window.frames['topFrame'] 来引用上方的框架，
+
+

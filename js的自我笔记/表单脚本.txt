@@ -1,0 +1,79 @@
+在HTML中，表单是使用<form>来表示的。而在JavaScript中，表单对应的则是HTMLFormElement类型，HTMLFormElement继承了HTMLElement,因而与其他的HTML元素具有相同的默认属性。不过，HTMLFormElement也有自己的独有的属性和方法：
+	1.acceptCharset:服务器处理的字符集，等价于HTML中的accept-charset特性
+	2.action 接收请求的URL。等价于HTML中的action
+	3.elements：表单中所有控件的集合
+	4.enctype:请求的编码类型：
+	5.method:要发送的HTTP请求，通常为get和post
+	6.name:表单的名称，等价于html中的name特性
+	7.reset()：将所有的表单域重置为默认值
+	8.submit():提交表单
+	9.target：用于发送请求和接收响应的窗口名称。
+
+那么取得form匀速的引用的方式是有好几种的，起中最常见的是将它看作为最常见的其他元素一样，并为其添加id特性，然后在像下面一样使用getelementByID()方法找到他
+ var form = document.getelementById("form1");
+
+还可以使用document.forms可以取得页面中所有的表单，在这个集合中，可以使用数值索引或name 值来取得特定的表单，如下例：
+	var firstForm = document.forms[0];//取得页面中的第一个表单
+	var myForm = docunment.forms["form2"] //取得页面中名为form2 的表单
+
+	同时，我们可以同时为表单设置id和name 属性，但是他们的值不一定相同，但建议最好name 和id是不要相同的名。
+
+
+提交表单：
+	用户单击提交按钮或图像按钮的时候，就会提交表单，使用<input>和<button>都可以定义提交按钮，只要将其的TYPE特性的值设置为"submit"即可。而图像按钮则是通过将<input>特性设置为image来定义。
+
+	<input type="submit" value="submit form">
+
+	<button type="submit" >submit button</button>//这是自定义的提交按钮
+
+	<input type='image' src="ccc.gif">//图像提交按钮
+
+	那么已这种方式提交表单时，浏览器将请求发送给服务器之前触发submit事件，这样，我们就有机会去验证表单数据，并根据决定是否允许表单的提交，阻止这个事件的默认行为是可以取消将表单提交的，例如：
+		var form = document.getElement("mrfrom");
+		EventUtil.addHandler(from,"submit",function(event){
+			//取得事件对象
+			event= EventUtil.getEvent(event);
+
+			//阻止默认行为
+
+			EventUtil.preventDefault(event);
+
+		});
+
+		一般来说，当表单数据无效时是不能讲数据发送而给服务器的。
+
+		在JavaScript中，可以使用编程的方式来调用submit()方法来提交表单，而且，这种方式是不需要包含提交按钮。任何时候都是可以正常的提交表单》
+			var form = document.getElemrntById("myform");
+			form.submit();
+
+		那么在提交表单的最大问题就是重复提交表单，如何处理重复提交表单呢？
+			两种方法：
+				1.在第一次提交表单后就禁用提交按钮
+				2.利用onsubmit事件处理程序取消后续的表单提交工作
+
+			如下例：
+				EventUtil.addHandler(form,"submit",function(){
+					evnet = EventUtil.getEvent(event);
+					var target = EventUtil.getTarget(event);
+						//	取消提交表单
+					var btn = target.element["submit-btn"];
+						//禁用他
+					btn.disabled = true;
+				})
+
+		注意：不能通过onclick事件处理程序来实现这个功能，原因是不同浏览器存在"时差"，有的浏览器会在触发表单的submit事件之前触发click事件，而有的浏览器相反，对于先触发click事件的浏览器，意味着会在提交发生之前禁用按钮，结果永远都不会提交表单。因此，最好是通过submit事件来禁用提交按钮。
+
+
+	重置表单:reset()方法
+		当然也是可以使用阻止重置的操作
+		var form = document.getElement("mrfrom");
+		EventUtil.addHandler(from,"reset",function(event){
+			//取得事件对象
+			event= EventUtil.getEvent(event);
+
+			//阻止默认行为
+
+			EventUtil.preventDefault(event);
+
+		});
+		在生活中，我们较少的使用表单重置按钮，更常见的做法是提供一个取消的按钮，让用户能够回到前一个页面，而不是盲目的重置表单
