@@ -1,0 +1,3 @@
+如果排列的元素是等高的话，那么就可以使用浮动来布局，不过元素不够高的的话，不添加多余的标签的，可以使用inline-block来布局。
+在Firefox。Safari，opera，IE8中的inline-block中元素之间会莫名多出3px的间距，其实这个是换行符，并不是bug，如果将inline-block元素之前的换行符去掉的话，这3px的间距也会消失，
+在不影响代码的美观的情况下去掉间距呢，可以子在inline-block的父元素加上font-size：0；然后在inline-block将字体设置会来
