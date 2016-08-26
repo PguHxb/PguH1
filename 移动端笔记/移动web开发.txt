@@ -1,0 +1,66 @@
+移动端技术将宽度(width)设置为100%，后进行的编写。
+网页端和移动端的区别在于显示屏大小的区别和基于什么为内核的，在移动端中，你有可能不需要考虑兼容，因为移动端用的都是现代浏览器。
+
+移动端是一个怎样的显示呢？
+将网页端的页面显示在移动端中，是会出行滚动条的，因为它们的尺寸不同，所以就有了viewport这个概念，
+
+
+页面并不是直接在移动中，而是有一层东西在那里，网页附着在这东西上，而显示，而这东西就是viewport。网页是承载在viewport上，
+而viewport则会显示和移动端屏幕一样大。也就会将内容完全的显示在屏幕上。而viewport的默认大小是980px.
+
+
+viewport参数：
+ 	width:宽度设置的是viewport宽度，可以将width设置为:width:"device-width"//这个宽度是设备的宽度
+
+ 	initial-scale:初始化缩放比，大于0 的数字，但是大部分还是将数值设置为1.0，因为是等比缩放
+
+ 	maximum-scale：最大缩放比，大于0 的数字
+ 	minimum-scale：最小缩放比，大于0 的数字
+
+ 	user-scaleble：用户是否可以进行缩放，yes或者no(1或0)；
+
+ 	<head>
+ 		<meta charset="utf-8">
+ 		<meta name="viewport" content="width:divice-width,initial-scale=1.0"
+ 	</head>
+
+ 	对移动端是这样设置的，必须将移动端的声明置于字符声明后。
+
+
+
+
+
+ 	接下来的就是设置css样式了。
+ 	在移动端中，默认的a标签是高亮灰色的，所以我们应当清除：
+ 	那么我们所用的就是-webkit-tap-hightlight-color:transparent:意思就是将高亮以透明显示，如果高亮以透明显示，那就代表这的是看不见了，看不见了也就代表着高亮被清除了.
+ 	还有就是将box-sizing:border-box;就是以边框为计算。
+ 	因为后期基本使用的百分比布局，从而防止溢出。
+
+ 	那么css的样式就应该设置为：
+ 	*,
+ 	::before,
+ 	::after{
+ 		margin:0;
+ 		padding:0;
+ 		-webkit-tap-highlight-box:transparent;
+ 		box-sizing:border-box;
+ 	}
+ 	body{
+ 		font-size:14px;
+ 		font-faily:'microsoft yahei',sans-serif;//设置的是默认字体
+ 		color:#333;
+ 	}
+ 	input{
+ 		border:none;
+ 		outline:none;
+ 		//清除移动端的默认样式，因为在移动端渲染的时候，不同的浏览器显示的效果时是不同的，那么如果不清除，则有可能有的浏览器是会有内阴影的效果
+ 		-webkit-appearance:none;//设置当前表单的类型
+ 	}
+
+ 	.clearfix::after{
+ 		coontent:'';
+ 		height:0
+ 		width:0
+ 		display:block;
+ 		clear:both;
+ 	}
