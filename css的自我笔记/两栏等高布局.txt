@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>创建节点</title>
+	<style type="text/css">
+	
+		.left{width:200px; margin-bottom:-3000px; padding-bottom:3000px; background:#cad5eb; float:left;}
+		.right{width:400px;height:600px;margin-bottom:-3000px; padding-bottom:3000px; background:#f0f3f9; float:right;}
+		
+	</style>
+</head>
+<body>
+	<div id="content">
+	    <div class="left">左边，无高度属性，自适应于最高一栏的高度</div>
+	    <div class="right">右边，无高度属性，自适应于最高一栏的高度</div>
+	  
+	</div>
+</body>
+</html>
+
+要点1：父容器设置超出隐藏：overflow:hidden;
+要点2：子容器设置padding-bottom:1000px;一个足够大的值。然后再设置一个margin-bottom的值和padding-bottom相等的负值 ，相抵消
