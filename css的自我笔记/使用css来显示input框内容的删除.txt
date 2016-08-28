@@ -1,0 +1,29 @@
+实现原理
+
+HTML部分
+因为search类型文本框在Chrome/Opera/Safari下尺寸不好控制，因此使用缺省的类型(也就是text类型)；
+required是必要属性，配合CSS伪类实现我们的效果。
+CSS部分
+使用的是:valid伪类。这是CSS3中新增伪类，IE10+以及其他现代浏览器支持，表示表单合法。由于HTML中的<input>有HTML5表单验证属性required. 于是，如果文本框没有内容，则不合法；有内容，则合法，就会触发这里的:valid伪类选择器。而这里:valid伪类控制后面的清除按钮显示，于是就实现了我们想要的效果。
+啊，对了。IE11浏览器下不是所有的文本框都有黑色的叉叉吗，会跟这里的自定义清除按钮重叠，::-ms-clear { display: none; }这段代码可以去之~~
+
+
+
+代码
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>input框的清除</title>
+	<style type="text/css">
+		.input { padding: 5px; margin: 0; border: 1px solid #beceeb; }
+		.clear { display: none; position: absolute; width: 16px; height: 16px; margin: 6px 0 0 -20px; }
+		.input::-ms-clear { display: none; }
+		.input:valid + .clear { display: inline; }
+	</style>
+</head>
+<body>
+	输入任意内容：<input class="input" required><a class="clear">x</a>
+</body>
+</html>

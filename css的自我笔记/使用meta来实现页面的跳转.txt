@@ -1,0 +1,20 @@
+在我们网页的头部文件中，是有<meta>源信息的，有我们的常用定义的编码，关键字(name=keywords),描述(name="descripition")等，这些都是利于SEO的
+还有就是告诉页面视区的大小，就是移动端的设置
+<meta name="viewport" content="width=device-width,initial-scale=1.0 user-scalable=no">
+
+也还是可以定义网页的过期时间的等等。。。
+
+当然，这里所说的就是页面的跳转问题了
+<meta http-equiv="refresh" content="5">
+表示的是隔5秒刷新一次页面
+<meta http-equiv="refresh" content="5; url='/'">
+表示的是当前页面2秒后跳转到首页
+
+<meta http-equiv="refresh" content="5;url="www.baidu.com">
+表示的是页面直接跳转到你需要的界面上。
+
+但是，没有推广的使用是因为在旧时代的浏览器中，是对meta 有点小小的不友好
+不友好体现在两个方面：(当然，自己是没有实践过的，只是看资料而已，有机会是要试验一把的)
+1.时间跳转设为0的时候，有时候页面是会闪的
+2.跳转到其他页面，浏览器的后退按钮是不能用的。
+
