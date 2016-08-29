@@ -1,0 +1,63 @@
+*,
+::before,
+::after{
+	margin: 0;
+	padding: 0;
+	/*清除移动端默认的点击高亮的效果,在移动端特有的就是点击有高亮的效果*/
+	
+	-webkit-tap-highlight-color:transparent;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+
+
+}
+body{
+	font-size: 14px;
+	font-family: "MicroSoft YaHei",sans-serif;
+	color: #333;
+
+}
+a{
+	color: #333;
+	text-decoration: none;
+
+}
+a:hover{
+	text-decoration: none;
+
+}
+li{
+	list-style: none;
+}
+input{
+	border: none;
+	outline: none;
+	-webkit-appearance: none;/*清除移动端的默认移动端样式*/
+
+}
+.fl{
+	float: left;
+}
+.fr{
+	float: right;
+}
+.clearfix:after{
+	content: "";
+	height: 0;
+	display: block;
+	visibility: hidden;
+	clear:both;
+}
+
+.m_l10{
+	margin-left: 10px;
+}
+.m_r10{
+	margin-right: 10px;
+}
+.m_t10{
+	margin-top: 10px;
+}
+.m_b10{
+	margin-bottom: 10px;
+}
